@@ -1,11 +1,13 @@
 [package]
-name = 'MiniSoccer'
-version = '1.0.0'
+name = "soccer_coin"
+version = "1.0.0"
 authors = []
 
 [addresses]
+soccer_coin="0x42"
 
 [dev-addresses]
+
 [dependencies.AptosFramework]
 git = 'https://github.com/aptos-labs/aptos-core.git'
 rev = 'mainnet'
