@@ -4,7 +4,7 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-
+soccer_coin="0xafca86d0baba3b9acd3608e6d70e8c2a9997aaaad8ebdda71351a9b8b97f0728"
 [dev-addresses]
 
 [dependencies.AptosFramework]
