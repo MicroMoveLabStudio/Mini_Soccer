@@ -8,6 +8,7 @@ module soccer_coin::account {
     use aptos_framework::aptos_coin::AptosCoin;
 
     friend soccer_coin::soccer_coin;
+
     /// Holds the score for an account
     /// The score must be stored in chain
     struct GameInfo has key{
@@ -25,7 +26,8 @@ module soccer_coin::account {
     struct InfoEvent has store, drop{
         score: u64,
         progress: u64,
-        round: u8
+        round: u8,
+        is_locked: bool
     }
 
     struct UpdateEvent has store, drop{
@@ -49,7 +51,7 @@ module soccer_coin::account {
     }
 
     /// initialize the struct `GameInfo` for an account
-    public entry fun init_account<Info>(account: &signer,
+    public entry fun init_account(account: &signer,
                                         id: String,
                                         name: String){
         let addr = signer::address_of(account);
@@ -79,7 +81,8 @@ module soccer_coin::account {
             InfoEvent{
                 score: gameinfo.score,
                 progress: gameinfo.progress,
-                round: gameinfo.round
+                round: gameinfo.round,
+                is_locked: gameinfo.is_locked
             }
         )
     }
@@ -125,14 +128,28 @@ module soccer_coin::account {
         if (is_locked(signer::address_of(account))){
             return
         };
-        let is_locked_flag = &mut borrow_global_mut<GameInfo>(signer::address_of(account)).is_locked;
+        let gameinfo = borrow_global_mut<GameInfo>(signer::address_of(account));
+        let is_locked_flag = &mut gameinfo.is_locked;
         *is_locked_flag = true;
+        event::emit_event<LockEvent>(
+            &mut gameinfo.locked_events,
+            LockEvent{
+                locked: true
+            }
+        )
     }
 
     public entry fun unlock_account(from: &signer, to: address, amount:u64) acquires GameInfo{
         assert!(coin::balance<Coin<AptosCoin>>(signer::address_of(from)) >= amount, ENotEnoughAPTCoinToUnlock);
         coin::transfer<Coin<AptosCoin>>(from, to, amount);
-        let is_locked_flag = &mut borrow_global_mut<GameInfo>(signer::address_of(from)).is_locked;
+        let gameinfo = borrow_global_mut<GameInfo>(signer::address_of(from));
+        let is_locked_flag = &mut gameinfo.is_locked;
         *is_locked_flag = false;
+        event::emit_event<LockEvent>(
+            &mut gameinfo.locked_events,
+            LockEvent{
+                locked: false
+            }
+        )
     }
 }

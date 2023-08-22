@@ -13,7 +13,7 @@ module soccer_coin::soccer_coin {
         managed_coin::initialize<SoccerCoin>(
             sender,
             b"Soccer Coin",
-            b"Soccer",
+            b"MSC",
             6,
             false,
         );

@@ -4,7 +4,6 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-soccer_coin="0x42"
 
 [dev-addresses]
 
@@ -13,4 +12,8 @@ git = 'https://github.com/aptos-labs/aptos-core.git'
 rev = 'mainnet'
 subdir = 'aptos-move/framework/aptos-framework'
 
+[dependencies.AptosToken]
+git = 'https://github.com/aptos-labs/aptos-core.git'
+rev = 'mainnet'
+subdir = 'aptos-move/framework/aptos-token'
 [dev-dependencies]
