@@ -1,0 +1,29 @@
+[package]
+name = "soccer_nft"
+version = "1.0.0"
+authors = []
+
+[addresses]
+
+soccer_coin="0x09ce62718f30870fc72024b09de322c369b168f07b3f26f69386fb4992edc7d8"
+
+[dev-addresses]
+
+[dependencies.AptosFramework]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-framework"
+
+[dependencies.AptosToken]
+git = "https://github.com/aptos-labs/aptos-core.git"
+rev = "mainnet"
+subdir = "aptos-move/framework/aptos-token"
+
+[dependencies]
+soccer_coin = { local="../soccer_coin" }
+
+#[dependencies]
+
+#soccer_coin = {git = "https://github.com/MicroMoveLabStudio/Mini_Soccer.git", subdir = "move/soccer_coin", rev = "main"}
+
+[dev-dependencies]
