@@ -6,7 +6,6 @@ module soccer_coin::account {
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::coin::{Self, Coin};
     use aptos_framework::event::{Self, EventHandle};
-    use aptos_std::big_vector::borrow;
 
     friend soccer_coin::soccer_coin;
 
@@ -120,7 +119,7 @@ module soccer_coin::account {
         assert!(!is_locked(signer::address_of(account)), ELocked);
         assert!(get_score(account) >= value, ENotEnoughScore);
         let score = borrow_global<GameInfo>(signer::address_of(account)).score;
-        let gameinfo = borrow_global_mut<GameInfo>(signer::address_of(account)));
+        let gameinfo = borrow_global_mut<GameInfo>(signer::address_of(account));
         let s_ref = &mut gameinfo.score;
         *s_ref = score - value;
     }

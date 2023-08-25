@@ -6,10 +6,9 @@ module soccer_nft::soccer_nft {
     use aptos_std::table;
     use aptos_framework::account::{Self, SignerCapability};
     use aptos_framework::coin;
-    use aptos_framework::event::EventHandle;
     use aptos_framework::resource_account;
 
-    use aptos_token::token::{Self, TokenId, TokenDataId};
+    use aptos_token::token::{Self, TokenDataId};
 
     use soccer_coin::account as ac;
     use soccer_coin::soccer_coin::SoccerCoin;
@@ -25,20 +24,11 @@ module soccer_nft::soccer_nft {
         img_list: table::Table<String, String>
     }
 
-
-    struct NFTList has store, drop {
-        token_store: vector<TokenId>
-    }
-
-    struct NFTListEven has key {
-        search_event: EventHandle<NFTList>
-    }
-
-
     const EAddressNotRegisterd: u64 = 1;
     const EAddressProgressIsNotDone: u64 = 2;
-    const ESoccerCoinNotEnough: u64 = 1;
+    const ESoccerCoinNotEnough: u64 = 3;
 
+    /// Insert the Image resources to NFTImageList
     public fun insert_image(address: &signer) {
         let addr = signer::address_of(address);
         let img_price = table::new<String, vector<u64>>();
@@ -80,6 +70,7 @@ module soccer_nft::soccer_nft {
         });
     }
 
+    ///Initailize the module, create the NFT collection.
     fun init_module(resource_account: &signer) {
         let collection_name = string::utf8(b"Soccer Game NFT Collection");
         let description = string::utf8(b"NFT issued by Mini Soccer Game");
@@ -147,7 +138,7 @@ module soccer_nft::soccer_nft {
         let nft_progress = *vector::borrow(table::borrow(&img_list.img_price, level), 1);
         assert!(ac::get_progress(receiver) >= nft_progress, EAddressProgressIsNotDone);
         assert!(coin::balance<SoccerCoin>(signer::address_of(receiver)) >= nft_price, ESoccerCoinNotEnough);
-        coin::transfer<SoccerCoin>(receiver, @scccer_nft, nft_price);
+        coin::transfer<SoccerCoin>(receiver, @soccer_nft, nft_price);
 
         let (token_data_id, resource_signer) = create_resource_signer_and_tokendata_id(&nft_minter.signer_cap,
             nft_minter.collection,
